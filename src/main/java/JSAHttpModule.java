@@ -14,15 +14,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 
 public abstract class JSAHttpModule {
 
+	private String ip,userName,passWord;
+	
+		
 	protected HttpResponse establishConnection(HttpRequestBase request) throws Exception{
+		
 		final HttpClientContext context = HttpClientContext.create();
-    	HttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
+		HttpClient client = new LogCollectorRequestExecutor().getClient();
     	appendMandatoryHeaders(request);
     	appendAuthenticationHeader(request);
     	HttpResponse response = client.execute(request, context);
@@ -30,17 +32,19 @@ public abstract class JSAHttpModule {
 	}
 	
 	protected HttpGet formGetRequest(){
-		HttpGet request = new HttpGet("https://10.207.97.77" + getURI());
+		System.out.println(getIp());
+		HttpGet request = new HttpGet("https://" + getIp() + getURI());
     	return request;
 	}
 	
 	protected HttpPost formPostRequest(){
-		HttpPost request = new HttpPost("https://10.207.97.77" + getURI());
+		
+		HttpPost request = new HttpPost("https://" + getIp() +  getURI());
     	return request;
 	}
 	
 	protected HttpDelete formDeleteRequest(){
-		HttpDelete request = new HttpDelete("https://10.207.97.77" + getURI());
+		HttpDelete request = new HttpDelete("https://" + getIp() + getURI());
     	return request;
 	}
 	
@@ -57,13 +61,17 @@ public abstract class JSAHttpModule {
 	}
 	
 	private String getUserName() {
-		return "admin";
+		return userName;
 	}
 
 	private String getPassword() {
-		return "juniper";
+		return passWord;
 	}
-
+	
+	private String getIp(){
+		return ip;
+	}
+	
 	protected void printResponse(HttpResponse response) throws Exception{
 		InputStream in = response.getEntity().getContent();
     	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -77,8 +85,9 @@ public abstract class JSAHttpModule {
     	pw.close();
 	}
 	
-	public JSAHttpModule() {
+	public JSAHttpModule(String ip,String userName,String passWord) {
         super();
+        this.ip = ip; this.userName = userName; this.passWord = passWord;
     }
 	
 	protected abstract String getURI();

@@ -10,6 +10,10 @@ import com.fasterxml.jackson.core.JsonToken;
 
 public class GetDatabases extends JSAHttpModule{
 
+	public GetDatabases(String ip, String userName, String passWord) {
+		super(ip, userName, passWord);
+	}
+
 	public List<String> fetchList() throws Exception{
 		HttpResponse response = establishConnection(formGetRequest());
 		List<String> searchIdList = new ArrayList<String>();

@@ -2,6 +2,10 @@
 
 public class DeleteSearchID extends JSAHttpModule{
 	
+	public DeleteSearchID(String ip, String userName, String passWord) {
+		super(ip, userName, passWord);
+	}
+
 	private String searchID;
 	
 	

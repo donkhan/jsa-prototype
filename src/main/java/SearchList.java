@@ -10,6 +10,10 @@ import com.fasterxml.jackson.core.JsonToken;
 
 public class SearchList extends JSAHttpModule{
 
+	public SearchList(String ip, String userName, String passWord) {
+		super(ip, userName, passWord);
+	}
+
 	public List<String> fetchList() throws Exception{
 		HttpResponse response = establishConnection(formGetRequest());
 		List<String> searchIdList = new ArrayList<String>();
@@ -32,7 +36,7 @@ public class SearchList extends JSAHttpModule{
 	}
 	
 	public static void main(String[] args) throws Exception {
-		SearchList bae = new SearchList();
+		SearchList bae = new SearchList("10.207.99.77","admin","juniper");
     	List<String> list = bae.fetchList();
     	for(String s : list){
     		if(s.startsWith("9de")){

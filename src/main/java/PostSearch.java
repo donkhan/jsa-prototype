@@ -14,6 +14,10 @@ import com.fasterxml.jackson.core.JsonToken;
 
 public class PostSearch extends JSAHttpModule{
 
+	public PostSearch(String ip, String userName, String passWord) {
+		super(ip, userName, passWord);
+	}
+
 	private String queryParam;
 	
 	public String getQueryParam() {
@@ -25,10 +29,12 @@ public class PostSearch extends JSAHttpModule{
 	}
 
 	public static void main(String[] args) throws Exception {
-		PostSearch bae = new PostSearch();
+		PostSearch bae = new PostSearch("10.207.99.77","admin","juniper");
 		bae.setQueryParam("select count(*) from events");
 		System.out.println(bae.getSearchId());
 	}
+	
+	
 	
 	public String getSearchId() throws Exception {
 		HttpPost request = formPostRequest();
@@ -48,8 +54,10 @@ public class PostSearch extends JSAHttpModule{
 			
 		}
 		return "";
+		
+		
 	}
-
+	
 	@Override
 	protected String getURI() {
 		return "/api/ariel/searches";
